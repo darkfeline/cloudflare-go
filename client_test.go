@@ -23,7 +23,7 @@ import (
 
 func Example_GET() {
 	ctx := context.Background()
-	c := cloudflare.Client{
+	c := &cloudflare.Client{
 		Token: "secret token",
 	}
 	resp, err := c.Call(ctx, "GET", "zones?match=any&name=example.com", nil)
@@ -39,7 +39,7 @@ func Example_GET() {
 
 func Example_PATCH() {
 	ctx := context.Background()
-	c := cloudflare.Client{
+	c := &cloudflare.Client{
 		Token: "secret token",
 	}
 	resp, err := c.Call(ctx, "PATCH", "zones/zoneID/dns_records/recordID",
