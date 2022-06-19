@@ -52,24 +52,24 @@ func (c *Client) Call(ctx context.Context, method string, path string, data any)
 	if data != nil {
 		b = bytes.NewBuffer(nil)
 		if err := json.NewEncoder(b).Encode(data); err != nil {
-			return nil, fmt.Errorf("api call %s: %s", path, err)
+			return nil, fmt.Errorf("cloudflare call %s %s: %s", method, path, err)
 		}
 	}
 	const base = "https://api.cloudflare.com/client/v4/"
 	req, err := http.NewRequestWithContext(ctx, method, base+path, b)
 	if err != nil {
-		return nil, fmt.Errorf("api call %s: %s", path, err)
+		return nil, fmt.Errorf("cloudflare call %s %s: %s", method, path, err)
 	}
 	req.Header.Add("Authorization", "Bearer "+c.Token)
 	req.Header.Add("Content-Type", "application/json")
 	resp, err := c.C.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("api call %s: %s", path, err)
+		return nil, fmt.Errorf("cloudflare call %s %s: %s", method, path, err)
 	}
 	defer resp.Body.Close()
 	var r *Response
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
-		return nil, fmt.Errorf("api call %s: %s", path, err)
+		return nil, fmt.Errorf("cloudflare call %s %s: %s", method, path, err)
 	}
 	return r, nil
 }
